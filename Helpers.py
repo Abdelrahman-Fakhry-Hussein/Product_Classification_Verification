@@ -1,4 +1,4 @@
-
+import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 
@@ -78,6 +78,45 @@ def getFiles(path=""):
 
     return [imlist, count]
 
+def getFiless(path="",typess=""):
+    imlist = {}
+    count = 0
+    if (typess=="train"):
+        for each in os.listdir(path):
+            imlist[each] = []
+            for imagefile in os.listdir(path + '/' + each ):
+                image_path = path + '/' + each + '/' + imagefile
+                if is_image_readable(image_path):
+                    # Read the image using OpenCV
+                    im = cv2.imread(image_path)
+                    im = cv2.resize(im, (224, 224))
+                    imlist[each].append(im)
+                    count += 1
+    else:
+        for each in os.listdir(path):
+            imlist[each] = []
+            for imagefile in os.listdir(path + '/' + each+'/'+typess+'/'):
+                image_path = path + '/'+ each + '/'+typess+'/'+ imagefile
+                if is_image_readable(image_path):
+                    # Read the image using OpenCV
+                    im = cv2.imread(image_path)
+                    im = cv2.resize(im, (224, 224))
+                    # im = np.expand_dims(im, axis=0)
+                    # Convert BGR to RGB
+                    # im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+                    # im = im / 255
+
+                    if path.__contains__("Train"):
+                        imlist[each].append(im)
+                        count += 1
+
+                    else:
+                        imlist[each].append(im)
+                        count += 1
+                else:
+                    continue
+
+    return [imlist, count]
 
 # preview any image
 def preview_image(imlist, key, index):
